@@ -150,7 +150,8 @@ def train(
     policy_params_fn: a user-defined callback function that can be used for
       saving policy checkpoints
     randomization_fn: a user-defined callback function that generates randomized
-      environments
+      environments,
+    previous_params: Optional[tuple] = None,
 
   Returns:
     Tuple of (make_policy function, network params, metrics)
