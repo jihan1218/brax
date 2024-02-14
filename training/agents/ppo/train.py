@@ -367,16 +367,31 @@ def train(
 			**{f'training/{name}': value for name, value in metrics.items()}
 		}
 		return training_state, env_state, metrics  # pytype: disable=bad-return-type  # py311-upgrade
-	
-	init_params = ppo_losses.PPONetworkParams(
-		policy=ppo_network.policy_network.init(key_policy),
-		value=ppo_network.value_network.init(key_value))
-	training_state = TrainingState(  # pytype: disable=wrong-arg-types  # jax-ndarray
-		optimizer_state=optimizer.init(init_params),  # pytype: disable=wrong-arg-types  # numpy-scalars
-		params=init_params,
-		normalizer_params=running_statistics.init_state(
-			specs.Array(env_state.obs.shape[-1:], jnp.dtype('float32'))),
-		env_steps=0)
+
+
+    if previous_params != None:
+        previous_policy = jax.tree_util.tree_map(lambda x: jnp.expand_dims(x, axis=0), previous_params[1])
+        # print(previous_policy['params']['hidden_0']['kernel'].shape)
+        init_params = ppo_losses.PPONetworkParams(
+            policy=previous_policy,
+            value=previous_policy)
+        training_state = TrainingState(  # pytype: disable=wrong-arg-types  # jax-ndarray
+            optimizer_state=optimizer.init(init_params),  # pytype: disable=wrong-arg-types  # numpy-scalars
+            params=init_params,
+            normalizer_params=previous_params[0],
+            env_steps=0)
+    else:
+        init_params = ppo_losses.PPONetworkParams(
+            policy=ppo_network.policy_network.init(key_policy),
+            value=ppo_network.value_network.init(key_value))
+        # print(ppo_network.policy_network.init(key_policy)['params']['hidden_0']['kernel'].shape)
+        training_state = TrainingState(  # pytype: disable=wrong-arg-types  # jax-ndarray
+            optimizer_state=optimizer.init(init_params),  # pytype: disable=wrong-arg-types  # numpy-scalars
+            params=init_params,
+            normalizer_params=running_statistics.init_state(
+                specs.Array(env_state.obs.shape[-1:], jnp.dtype('float32'))),
+            env_steps=0)
+    
 	training_state = jax.device_put_replicated(
 		training_state,
 		jax.local_devices()[:local_devices_to_use])
