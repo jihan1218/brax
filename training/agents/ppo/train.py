@@ -103,6 +103,7 @@ def train(
     randomization_fn: Optional[
         Callable[[base.System, jnp.ndarray], Tuple[base.System, base.System]]
     ] = None,
+    previous_params: Optional[tuple] = None,
 ):
   """PPO training.
 
@@ -151,7 +152,8 @@ def train(
       saving policy checkpoints
     randomization_fn: a user-defined callback function that generates randomized
       environments,
-    previous_params: Optional[tuple] = None,
+    previous_params: a previous trainined parameter that will be used as a initial
+      parameter
 
   Returns:
     Tuple of (make_policy function, network params, metrics)
