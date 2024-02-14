@@ -371,11 +371,11 @@ def train(
 
 
 	if previous_params != None:
-		previous_policy = jax.tree_util.tree_map(lambda x: jnp.expand_dims(x, axis=0), previous_params[1])
-		# print(previous_policy['params']['hidden_0']['kernel'].shape)
+		previous_policy = previous_params[1]
+		previous_value = previous_params[2]
 		init_params = ppo_losses.PPONetworkParams(
 			policy=previous_policy,
-			value=previous_policy)
+			value=previous_value)
 		training_state = TrainingState(  # pytype: disable=wrong-arg-types  # jax-ndarray
 			optimizer_state=optimizer.init(init_params),  # pytype: disable=wrong-arg-types  # numpy-scalars
 			params=init_params,
@@ -385,7 +385,6 @@ def train(
 		init_params = ppo_losses.PPONetworkParams(
 			policy=ppo_network.policy_network.init(key_policy),
 			value=ppo_network.value_network.init(key_value))
-		# print(ppo_network.policy_network.init(key_policy)['params']['hidden_0']['kernel'].shape)
 		training_state = TrainingState(  # pytype: disable=wrong-arg-types  # jax-ndarray
 			optimizer_state=optimizer.init(init_params),  # pytype: disable=wrong-arg-types  # numpy-scalars
 			params=init_params,
@@ -396,7 +395,6 @@ def train(
 	training_state = jax.device_put_replicated(
 		training_state,
 		jax.local_devices()[:local_devices_to_use])
-
 	if not eval_env:
 		eval_env = environment
 	if randomization_fn is not None:
@@ -468,7 +466,7 @@ def train(
 	# devices.
 	pmap.assert_is_replicated(training_state)
 	params = _unpmap(
-		(training_state.normalizer_params, training_state.params.policy))
+		(training_state.normalizer_params, training_state.params.policy, training_state.params.value))
 	logging.info('total steps: %s', total_steps)
 	pmap.synchronize_hosts()
 	return (make_policy, params, metrics)
