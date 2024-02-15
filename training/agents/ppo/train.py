@@ -455,7 +455,7 @@ def train(
 				training_metrics)
 			logging.info(metrics)
 			# progress_fn(current_step, metrics)
-			progress_fn(it, metrics)
+			progress_fn(it+1, metrics)
 			params = _unpmap(
 				(training_state.normalizer_params, training_state.params.policy))
 			policy_params_fn(current_step, make_policy, params)
