@@ -23,7 +23,7 @@ To continue your training from the previous run, simply load the parameters and 
 previous_params = model.load_params(model_file_path)
 
 train_fn = functools.partial(
-    ppo.train, num_timesteps=30_000_000, ... , **previous_params = previous_params**)
+    ppo.train, num_timesteps=30_000_000, ... , previous_params = previous_params)
 
 make_inference_fn, params, _= train_fn(environment=env, progress_fn=progress)
 ```
