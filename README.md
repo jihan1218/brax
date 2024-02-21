@@ -9,6 +9,8 @@ You need to either clone this repo or copy `brax.training.agents.ppo.train` and 
 After your first training `train_fn`, save your parameters. (Here you must run your initial training using my updated files because the current output params only contains policy.)
 
 ```python
+from brax.training.agents.ppo import train as ppo
+
 train_fn = functools.partial(
     ppo.train, num_evals=10, ... YOUR OWN PARAMETERS)
 
