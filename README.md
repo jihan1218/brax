@@ -6,7 +6,7 @@ By providing the `previous_params` parameter, users can load the parameters from
 You need to either clone this repo or copy `brax.training.agents.ppo.train` and `brax.training.agents.ppo.networks` files and replace into your python library.
 
 ## Usage
-After your first training `train_fn`, save your parameters. 
+After your first training `train_fn`, save your parameters. (Here you must run your initial training using my updated files because the current output params only contains policy.)
 
 ```python
 train_fn = functools.partial(
