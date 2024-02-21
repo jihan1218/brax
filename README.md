@@ -1,12 +1,12 @@
 # Customized PPO Training with Parameter Initialization from Previous Training
 
-This customized version of `brax.training.agents.ppo.train` allows users to continue training their model by initializing parameters from a previous training session.
+This lightly modified version of the brax.training.agents.ppo.train module allows users to continue training their model by initializing parameters from a previous training session.
 By providing the `previous_params` parameter, users can load the parameters from a previous run and start training from that point onwards, rather than starting with randomized parameters every time.
 ## Requirement
 You need to either clone this repo or copy `brax.training.agents.ppo.train` and `brax.training.agents.ppo.networks` files and replace into your python library.
 
 ## Usage
-After your first training `train_fn`, save your parameters. (Here you must run your initial training using my updated files because the current output params only contains policy.)
+After your first training train_fn, save your parameters. (Here you must run your initial training using the updated files because the current output params from the training only contains policy.)
 
 ```python
 from brax.training.agents.ppo import train as ppo
