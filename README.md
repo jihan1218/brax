@@ -10,7 +10,7 @@ After your first training `train_fn`, save your parameters. (Here you must run y
 
 ```python
 train_fn = functools.partial(
-    ppo.train, num_timesteps=30_000_000, ... YOUR OWN PARAMETERS)
+    ppo.train, num_evals=10, ... YOUR OWN PARAMETERS)
 
 make_inference_fn, params, _= train_fn(environment=env, progress_fn=progress)
 model.save_params(model_file_path, params)
@@ -23,7 +23,7 @@ To continue your training from the previous run, simply load the parameters and 
 previous_params = model.load_params(model_file_path)
 
 train_fn = functools.partial(
-    ppo.train, num_timesteps=30_000_000, ... , previous_params = previous_params)
+    ppo.train, num_evals=100, ... , previous_params = previous_params)
 
 make_inference_fn, params, _= train_fn(environment=env, progress_fn=progress)
 ```
