@@ -153,7 +153,7 @@ def train(
     saving policy checkpoints
     randomization_fn: a user-defined callback function that generates randomized
     environments,
-    previous_params: a previous trainined parameter that will be used as a initial
+    previous_params: a previous trained parameter that will be used as a initial
     parameter
 
   Returns:
